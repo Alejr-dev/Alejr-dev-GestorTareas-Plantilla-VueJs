@@ -1,56 +1,63 @@
 <template>
-    <!-- Contenedor principal del ítem de tarea -->
     <div>
-        <!-- Contenedor del título y el estado de la tarea -->
-        <div>
-            <!-- Muestra el título de la tarea y aplica un estilo tachado si la tarea está completada -->
-            <!-- Comentario: Cambia este estilo o agrega clases personalizadas -->
-            <h5 :style="{ textDecoration: completed ? 'line-through' : 'none' }">
-                {{ title }}
-            </h5>
-
-            <!-- Muestra si la tarea está Completada o Pendiente -->
-            <!-- Comentario: Puedes cambiar este texto o agregar etiquetas visuales (por ejemplo, con colores o iconos) -->
-            <span>
-                {{ completed ? 'Completada' : 'Pendiente' }}
-            </span>
-        </div>
-
-        <!-- Contenedor de botones de acción -->
-        <div>
-            <!-- Botón para marcar la tarea como completada o pendiente -->
-            <!-- Emite el evento 'toggle-completion' para indicar que se cambió el estado de la tarea -->
-            <!-- Comentario: Personaliza el texto, estilo o reemplaza con un ícono (ej. ✔ / ✘) -->
-            <button @click="$emit('toggle-completion')">
-                Marcar como {{ completed ? 'Pendiente' : 'Completada' }}
-            </button>
-
-            <!-- Botón para eliminar la tarea de la lista -->
-            <!-- Emite el evento 'delTodo' para indicar que se debe eliminar esta tarea -->
-            <!-- Comentario: Modifica el estilo, el texto, o reemplaza con un ícono como una papelera -->
-            <button @click="$emit('delTodo')">
-                Eliminar
-            </button>
-        </div>
+      <el-col :span="12">
+        <el-card class="todo-card" shadow="hover">
+          <el-row :gutter="12">
+            <el-col :span="21">
+              <p>{{ todo.type === 'task' ? todo.taskName : todo.issueName }}</p>
+            </el-col>
+            <el-col :span="3" class="action-col">
+              <el-button @click="handleDone" type="success" icon="el-icon-check" circle></el-button>
+            </el-col>
+          </el-row>
+        </el-card>
+      </el-col>
     </div>
-</template>
-
-<script>
-export default {
-    // Define el nombre del componente
+  </template>
+  
+  <script>
+  export default {
     name: 'TodoItem',
-
-    // Define las propiedades que este componente recibirá del componente padre
-    // Comentario: Puedes agregar más propiedades si es necesario (por ejemplo, 'dueDate' para la fecha de vencimiento)
     props: {
-        title: String,      // Título de la tarea
-        completed: Boolean, // Estado de la tarea (completada o pendiente)
+      todo: {
+        type: Object,
+        required: true
+      },
+      index: {
+        type: Number,
+        required: true
+      }
+    },
+    methods: {
+      handleDone() {
+        const eventName = this.todo.type === 'task' ? 'remove-todo' : 'close-issue';
+        this.$emit(eventName, this.index);
+      }
     }
-}
-</script>
-
-<style scoped>
-/* Puedes agregar tus propios estilos aquí */
-/* Por ejemplo, cambia el color de fondo de las tareas completadas */
-
-</style>
+  };
+  </script>
+  
+  <style scoped>
+  .todo-card {
+    margin: 10px 0;
+    padding: 10px;
+    transition: box-shadow 0.3s;
+  }
+  
+  .todo-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  p {
+    font-size: 1.1em;
+    color: #2c3e50;
+    margin: 0;
+  }
+  
+  .action-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  </style>
+  

@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import HomeView from '../views/HomeView.vue';
-import AddTask from '../views/AddTask.vue';
-import FetchTasks from '../views/FetchTasks.vue';
-import CombinedView from '../views/CombinedView.vue';
+import TodoList from '../views/TodoList.vue';
+import IssueList from '../views/IssueList.vue';
+import TodosIssue from '../views/TodosIssue.vue';
 
 Vue.use(VueRouter);
 
@@ -11,29 +11,34 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
   },
   {
-    path: '/addtask',
-    name: 'AddTask',
-    component: AddTask
+    path: '/about',
+    name: 'about',
+    component: () => import('../views/AboutView.vue'), // Lazy-loaded
   },
   {
-    path: '/fetch-tasks',
-    name: 'FetchTasks',
-    component: FetchTasks
+    path: '/todo-list',
+    name: 'TodoList',
+    component: TodoList,
   },
   {
-    path: '/combined-view',
-    name: 'CombinedView',
-    component: CombinedView
-  }
+    path: '/issue-list',
+    name: 'IssueList',
+    component: IssueList,
+  },
+  {
+    path: '/todos-issue',
+    name: 'TodosIssue',
+    component: TodosIssue,
+  },
 ];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
 export default router;
